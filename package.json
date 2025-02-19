@@ -1,0 +1,11 @@
+{
+  "name": "gmailattachmentsremover",
+  "version": "0.0.1",
+  "description": "A little App Script to clean those heavy attachments in Gmail.",
+  "main": "src/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Cyrille Berliat <cyrille@berliat.fr>",
+  "license": "ISC"
+}

@@ -1,0 +1,40 @@
+{
+  "timeZone": "Asia/Shanghai",
+  "dependencies": {
+    "enabledAdvancedServices": [
+      {
+        "userSymbol": "Gmail",
+        "version": "v1",
+        "serviceId": "gmail"
+      }
+    ]
+  },
+  "exceptionLogging": "STACKDRIVER",
+  "oauthScopes": [
+    "https://mail.google.com/",
+    "https://www.googleapis.com/auth/script.locale",
+    "https://www.googleapis.com/auth/gmail.addons.execute"],
+  "runtimeVersion": "V8",
+  "addOns": {
+    "common": {
+      "name": "DeleteAttachments",
+      "logoUrl": "https://www.gstatic.com/images/icons/material/system/1x/pets_black_48dp.png",
+      "useLocaleFromApp": true,
+      "universalActions": [{
+        "label": "Support me!",
+        "openLink": "https://cyrille.berliat.fr"
+      }]
+    },
+    "gmail": {
+      "contextualTriggers": [{
+        "unconditional": {
+        },
+        "onTriggerFunction": "onGmailMessage"
+      }],
+      "homepageTrigger": {
+        "runFunction": "onHomepage",
+        "enabled": true
+      }
+    }
+  }
+}
