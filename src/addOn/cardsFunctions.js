@@ -1,34 +1,3 @@
-/**
- * Callback for rendering the homepage card.
- * @return {CardService.Card} The card to show to the user.
- */
-function onHomepage(e) {
-  Logger.log(e)
-
-  var conf = ConfigStore.getInstance()
-  var processLabel = conf.getLabelIn()
-  var processedLabel = conf.getLabelOut()
-  var dryRunMode = conf.getDryRunMode()
-  var action = CardService.newAction()
-      .setFunctionName('removeAttachmentsRemote')
-      .setParameters({processLabel: processLabel,
-                      processedLabel: processedLabel, dryRunMode: dryRunMode.toString()});
- 
-  var button_all = CardService.newTextButton()
-      .setText('BatchRemove from ' + processLabel)
-      .setOnClickAction(action)
-      .setTextButtonStyle(CardService.TextButtonStyle.FILLED);
-
-  var buttonSet = CardService.newButtonSet()
-      .addButton(button_all);
-
-  // Assemble the widgets and return the card.
-  var section = CardService.newCardSection()
-      .addWidget(buttonSet);
-
-  return createCard(section);
-}
-
 function createCard(pageSection) {
   var peekHeader = CardService.newCardHeader()
     .setTitle('DeleteAttachments')

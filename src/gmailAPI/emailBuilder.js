@@ -1,4 +1,4 @@
-function messageToMimeString(payload) {
+function removeAttachmentsFromMime(payload) {
   let boundary = "fg3q44wh5456u56jg0051265";
   let headers = prepareHeaders(payload);  // Get headers
   let body = prepareBody(payload, boundary, true);        // Get the body (text/html and attachments)

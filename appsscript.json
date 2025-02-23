@@ -26,7 +26,7 @@
       "useLocaleFromApp": true,
       "universalActions": [
         {
-          "label": "Support me!",
+          "label": "Say 'thank you'!",
           "openLink": "https://cyrille.berliat.fr"
         }
       ]

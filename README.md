@@ -43,7 +43,7 @@ If you use a proxy:
 
 ```
 git clone licryle/GmailAttachmentsRemover
-cd GmailAttachmentsRemover/src
+cd GmailAttachmentsRemover/
 
 clasp create --title GmailAttachmentsRemover --type Standalone --rootDir .
 ```
@@ -72,7 +72,7 @@ To be able run the script, you need to create a new Google Cloud (GCP) project.
 -- Application Type: Desktop App
 -- Name: __MyDevStation__ or whatever you wish to name your computer's credentials
 -- Click __CREATE__
--- Then __DOWNLOAD JSON__ to the ./src/ directory
+-- Then __DOWNLOAD JSON__ to the ./ directory
 -- Rename the file to __creds.json__
 
 #### Audience: Allow yourself to test
