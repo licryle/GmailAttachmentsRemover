@@ -16,7 +16,7 @@ function onGmailMessage(e) {
   // Get the subject of the email.
   var subject = thread.getFirstMessageSubject();
 
-
+  var ConfigStore = ConfigStore()
   var processLabel = ConfigStore.getLabelIn()
   var processedLabel = ConfigStore.getLabelOut()
   var dryRunMode = ConfigStore.getDryRunMode()

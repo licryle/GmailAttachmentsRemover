@@ -11,6 +11,7 @@ function onHomepage(e) {  // Get an access token scoped to the current message a
   // Get the ID of the message the user has open.
   var thread = GmailApp.getThreadById(e.gmail.threadId);
 
+  var ConfigStore = ConfigStore()
   var processLabel = ConfigStore.getLabelIn()
   var processedLabel = ConfigStore.getLabelOut()
   var dryRunMode = ConfigStore.getDryRunMode()
@@ -47,7 +48,7 @@ function createCard(pageSection) {
 
   var card = CardService.newCardBuilder()
       .addSection(pageSection)
-      //.addSection(CardService.newCardSection().addWidget(buildCardWithDropdown(DRYRUN_MODE)))
+      //.addSection(CardService.newCardSection().addWidget(buildCardWithDropdown(Constants.DRYRUN_MODE)))
       .setPeekCardHeader(peekHeader)
       .setFixedFooter(footer);
 

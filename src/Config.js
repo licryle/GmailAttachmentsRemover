@@ -1,4 +1,22 @@
 class ConfigStore {
+  constructor() {
+    if (Config.instance) {
+      return Config.instance;
+    }
+
+    this.CONFIGS = {
+      'DRYRUN_MODE': Constants.DRYRUN_MODE.DRYRUN_NONE,
+      'LABEL_IN': '_TooBigEmails',
+      'LABEL_OUT': '_FormerBigEmails'
+    };
+
+    Config.instance = this;
+  }
+
+  static getInstance() {
+    return Config.instance || new Config();
+  }
+
   /**
    * Get the configuration value for the provided key.
    * @param {string} key - The configuration key.
@@ -78,9 +96,3 @@ class ConfigStore {
     this.set('LABEL_OUT', value);
   }
 }
-
-ConfigStore.CONFIGS = {
-  'DRYRUN_MODE': DRYRUN_MODE.DRYRUN_NONE,
-  'LABEL_IN': '_TooBigEmails',
-  'LABEL_OUT': '_FormerBigEmails'
-};

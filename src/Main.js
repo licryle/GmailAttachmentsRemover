@@ -1,7 +1,7 @@
 function main() {
-  var processLabel = '_TooBigEmails'
-  var processedLabel = '_FormerBigEmails'
-  var dryRunMode = 0 // 0, 1 == Don't trash, 2 == Do_Nothing
+  var processLabel = '_TooBigEmails';
+  var processedLabel = '_FormerBigEmails';
+  var dryRunMode = Constants.DRYRUN_MODE.DRYRUN_NONE;
 
   getOrCreateLabelIdByName(processLabel);
   getOrCreateLabelIdByName(processedLabel);
