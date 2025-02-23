@@ -1,7 +1,7 @@
 class ConfigStore {
   constructor() {
-    if (Config.instance) {
-      return Config.instance;
+    if (ConfigStore.instance) {
+      return ConfigStore.instance;
     }
 
     this.CONFIGS = {
@@ -10,11 +10,11 @@ class ConfigStore {
       'LABEL_OUT': '_FormerBigEmails'
     };
 
-    Config.instance = this;
+    ConfigStore.instance = this;
   }
 
   static getInstance() {
-    return Config.instance || new Config();
+    return ConfigStore.instance || new ConfigStore();
   }
 
   /**
@@ -22,14 +22,14 @@ class ConfigStore {
    * @param {string} key - The configuration key.
    * @returns {string} - The value for the configuration key.
    */
-  static get(key) {
+  get(key) {
     let value = PropertiesService.getUserProperties().getProperty(key);
     if (value === null || value === undefined) {
-      if (ConfigStore.CONFIGS[key] === undefined) {
+      if (this.CONFIGS[key] === undefined) {
         throw new Error(`Unknown configuration key: ${key}`);
       }
       
-      return ConfigStore.CONFIGS[key]; // Return default value if not set
+      return this.CONFIGS[key]; // Return default value if not set
     }
 
     return value;
@@ -40,8 +40,8 @@ class ConfigStore {
    * @param {string} key - The configuration key.
    * @param {string} value - The value to set.
    */
-  static set(key, value) {
-    if (ConfigStore.CONFIGS[key] === undefined) {
+  set(key, value) {
+    if (this.CONFIGS[key] === undefined) {
       throw new Error(`Unknown key: ${key}`);
     }
 
@@ -52,7 +52,7 @@ class ConfigStore {
    * Get the dry run mode configuration.
    * @returns {string} - The dry run mode value.
    */
-  static getDryRunMode() {
+  getDryRunMode() {
     return this.get('DRYRUN_MODE');
   }
 
@@ -60,7 +60,7 @@ class ConfigStore {
    * Set the dry run mode configuration.
    * @param {string} value - The value to set for dry run mode.
    */
-  static setDryRunMode(value) {
+  setDryRunMode(value) {
     this.set('DRYRUN_MODE', value);
   }
 
@@ -68,7 +68,7 @@ class ConfigStore {
    * Get the input label configuration.
    * @returns {string} - The input label value.
    */
-  static getLabelIn() {
+  getLabelIn() {
     return this.get('LABEL_IN');
   }
 
@@ -76,7 +76,7 @@ class ConfigStore {
    * Set the input label configuration.
    * @param {string} value - The value to set for the input label.
    */
-  static setLabelIn(value) {
+  setLabelIn(value) {
     this.set('LABEL_IN', value);
   }
 
@@ -84,7 +84,7 @@ class ConfigStore {
    * Get the output label configuration.
    * @returns {string} - The output label value.
    */
-  static getLabelOut() {
+  getLabelOut() {
     return this.get('LABEL_OUT');
   }
 
@@ -92,7 +92,7 @@ class ConfigStore {
    * Set the output label configuration.
    * @param {string} value - The value to set for the output label.
    */
-  static setLabelOut(value) {
+  setLabelOut(value) {
     this.set('LABEL_OUT', value);
   }
 }

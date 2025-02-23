@@ -2,35 +2,31 @@
  * Callback for rendering the homepage card.
  * @return {CardService.Card} The card to show to the user.
  */
-function onHomepage(e) {  // Get an access token scoped to the current message and use it for GmailApp
-  // calls.
+function onHomepage(e) {
   Logger.log(e)
-  var accessToken = e.gmail.accessToken;
-  GmailApp.setCurrentMessageAccessToken(accessToken);
 
-  // Get the ID of the message the user has open.
-  var thread = GmailApp.getThreadById(e.gmail.threadId);
-
-  var ConfigStore = ConfigStore()
-  var processLabel = ConfigStore.getLabelIn()
-  var processedLabel = ConfigStore.getLabelOut()
-  var dryRunMode = ConfigStore.getDryRunMode()
-
+  var conf = ConfigStore.getInstance()
+  var processLabel = conf.getLabelIn()
+  var processedLabel = conf.getLabelOut()
+  var dryRunMode = conf.getDryRunMode()
   var action = CardService.newAction()
       .setFunctionName('removeAttachmentsRemote')
-      .setParameters({threadId: thread.getId(), processLabel: processLabel,
-                      processedLabel: processedLabel, dryRunMode: dryRunMode.toString(),
-                      accessToken: accessToken});
+      .setParameters({processLabel: processLabel,
+                      processedLabel: processedLabel, dryRunMode: dryRunMode.toString()});
  
-  var button = CardService.newTextButton()
-      .setText('BatchRemove"' + subject + '"')
+  var button_all = CardService.newTextButton()
+      .setText('BatchRemove from ' + processLabel)
       .setOnClickAction(action)
       .setTextButtonStyle(CardService.TextButtonStyle.FILLED);
 
   var buttonSet = CardService.newButtonSet()
-      .addButton(button);
+      .addButton(button_all);
 
-  return createCard(CardService.newCardSection().addWidget(buttonSet));
+  // Assemble the widgets and return the card.
+  var section = CardService.newCardSection()
+      .addWidget(buttonSet);
+
+  return createCard(section);
 }
 
 function createCard(pageSection) {

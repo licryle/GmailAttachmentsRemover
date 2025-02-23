@@ -5,10 +5,6 @@
  */
 function onGmailMessage(e) {
   Logger.log(e)
-  // Get an access token scoped to the current message and use it for GmailApp
-  // calls.
-  var accessToken = e.gmail.accessToken;
-  GmailApp.setCurrentMessageAccessToken(accessToken);
 
   // Get the ID of the message the user has open.
   var thread = GmailApp.getThreadById(e.gmail.threadId);
@@ -16,38 +12,23 @@ function onGmailMessage(e) {
   // Get the subject of the email.
   var subject = thread.getFirstMessageSubject();
 
-  var ConfigStore = ConfigStore()
-  var processLabel = ConfigStore.getLabelIn()
-  var processedLabel = ConfigStore.getLabelOut()
-  var dryRunMode = ConfigStore.getDryRunMode()
-  Logger.log(dryRunMode);
-  Logger.log(dryRunMode.toString());
+  var conf = ConfigStore.getInstance()
+  var processLabel = conf.getLabelIn()
+  var processedLabel = conf.getLabelOut()
+  var dryRunMode = conf.getDryRunMode()
 
   var action = CardService.newAction()
       .setFunctionName('removeAttachmentRemote')
       .setParameters({threadId: thread.getId(), processLabel: processLabel,
-                      processedLabel: processedLabel, dryRunMode: dryRunMode.toString(),
-                      accessToken: accessToken});
+                      processedLabel: processedLabel, dryRunMode: dryRunMode.toString()});
  
   var button_one = CardService.newTextButton()
       .setText('Delete Attachments from "' + subject + '"')
       .setOnClickAction(action)
       .setTextButtonStyle(CardService.TextButtonStyle.FILLED);
 
-  var action = CardService.newAction()
-      .setFunctionName('removeAttachmentsRemote')
-      .setParameters({threadId: thread.getId(), processLabel: processLabel,
-                      processedLabel: processedLabel, dryRunMode: dryRunMode.toString(),
-                      accessToken: accessToken});
- 
-  var button_all = CardService.newTextButton()
-      .setText('BatchRemove from ' + processLabel)
-      .setOnClickAction(action)
-      .setTextButtonStyle(CardService.TextButtonStyle.FILLED);
-
   var buttonSet = CardService.newButtonSet()
-      .addButton(button_one)
-      .addButton(button_all);
+      .addButton(button_one);
 
   // Assemble the widgets and return the card.
   var section = CardService.newCardSection()
@@ -66,20 +47,8 @@ function removeAttachmentsRemote(e) {
           .build();
   }
 
-  var accessToken = e.messageMetadata.accessToken;
-  if (!accessToken) {
-      Logger.log("Error: Missing access token.");
-      return CardService.newActionResponseBuilder()
-          .setNotification(CardService.newNotification()
-          .setText("Error: Missing access token"))
-          .build();
-  }
-  Logger.log(e.parameters.dryRunMode);
   dryRunMode = parseInt(e.parameters.dryRunMode, 10)
-  Logger.log(dryRunMode);
 
-  // Set the access token
-  GmailApp.setCurrentMessageAccessToken(accessToken);
   result = removeAttachments(e.parameters.processLabel, e.parameters.processedLabel, dryRunMode)
 
   return CardService.newActionResponseBuilder()
@@ -98,18 +67,8 @@ function removeAttachmentRemote(e) {
           .build();
   }
 
-  var accessToken = e.messageMetadata.accessToken;
-  if (!accessToken) {
-      Logger.log("Error: Missing access token.");
-      return CardService.newActionResponseBuilder()
-          .setNotification(CardService.newNotification()
-          .setText("Error: Missing access token"))
-          .build();
-  }
   dryRunMode = parseInt(e.parameters.dryRunMode, 10)
 
-  // Set the access token
-  GmailApp.setCurrentMessageAccessToken(accessToken);
   var thread = GmailApp.getThreadById(e.parameters.threadId);
   result = removeAttachment(thread, e.parameters.processLabel, e.parameters.processedLabel, dryRunMode)
 
