@@ -116,26 +116,29 @@ function incrementLastTwoDigits(str) {
 }
 
 function parseEmailsWithNames(headerValue) {
-  // Create a regular expression to match the email addresses and names (with or without quotes)
-  var regex = /"([^"]+)"\s*<([^>]+)>|([^,]+)\s*<([^>]+)>/g;
+  // Matches the email addresses and names (with or without quotes),
+  // and standalone emails.
+  var regex = /"([^"]+)"\s*<([^>]+)>|([^,<]+)\s*<([^>]+)>|([\w.-]+@[\w.-]+)/g;
   var results = [];
   var match;
 
-  // Loop through the string to find all matching email addresses and names
   while ((match = regex.exec(headerValue)) !== null) {
-    var name, email;
+    var name = "";
+    var email = "";
 
     if (match[1] && match[2]) {
-      // If we matched a name with quotes, capture name and email
+      // "Name" <email@example.com>
       name = match[1];
       email = match[2];
     } else if (match[3] && match[4]) {
-      // If we matched without quotes, capture name (or empty) and email
+      // Name <email@example.com>
       name = match[3].trim();
       email = match[4];
+    } else if (match[5]) {
+      // Standalone email (no name)
+      email = match[5];
     }
 
-    // Push an object with name and email to the results array
     results.push({ name: name, email: email });
   }
 
@@ -151,7 +154,11 @@ function encodeNonASCIIHeader(headerValue) {
   
   encodedEmails = []
   emails.forEach(function(email) {
-    encodedEmails.push(encodeMimeHeader(email.name) + ' <' + email.email + '>');
+    if (email.name != '') {
+      encodedEmails.push(encodeMimeHeader(email.name) + ' <' + email.email + '>');
+    } else {
+      encodedEmails.push(email.email);
+    }
   });
 
   return encodedEmails.join(',')
