@@ -49,12 +49,8 @@ function prepareBody(payload, boundary_parent, top_header=false) {
   } else {
       body += "--" + boundary_parent + "\r\n";
 
-      if (payload.mimeType === 'text/plain') {
-        body += "Content-Type: text/plain; charset=\"UTF-8\"\r\n";
-        body += "Content-Transfer-Encoding: base64\r\n\r\n";
-        body += encodeContent(decodeBody(payload.body.data)) + "\r\n";
-      } else if (payload.mimeType === 'text/html') {
-        body += "Content-Type: text/html; charset=\"UTF-8\"\r\n";
+      if (['text/plain', 'text/html', 'text/enriched'].includes(payload.mimeType) && payload.filename == "") {
+        body += "Content-Type: " + payload.mimeType + "; charset=\"UTF-8\"\r\n";
         body += "Content-Transfer-Encoding: base64\r\n\r\n";
         body += encodeContent(decodeBody(payload.body.data)) + "\r\n";
       } else if (payload.filename) {
@@ -64,7 +60,7 @@ function prepareBody(payload, boundary_parent, top_header=false) {
         body += "Content-Disposition: attachment; filename=\"Deleted: " + safeFilename + "\"\r\n";
         body += "Content-Transfer-Encoding: base64\r\n\r\n";
       } else {
-        throw Error
+        throw Error("Payload not supported - mimeType is " + payload.mimeType)
       }
   }
 
@@ -86,6 +82,8 @@ function encodeContent(content) {
 }
 
 function decodeBody(data) {
+  if (data == undefined) return "";
+
   if (Array.isArray(data)) {
     // Convert the array of integers into a Uint8Array
     let byteArray = new Uint8Array(data);
@@ -116,8 +114,7 @@ function incrementLastTwoDigits(str) {
 }
 
 function parseEmailsWithNames(headerValue) {
-  // Matches the email addresses and names (with or without quotes),
-  // and standalone emails.
+  // Updated regex to also match standalone email addresses
   var regex = /"([^"]+)"\s*<([^>]+)>|([^,<]+)\s*<([^>]+)>|([\w.-]+@[\w.-]+)/g;
   var results = [];
   var match;

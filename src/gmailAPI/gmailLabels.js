@@ -22,6 +22,7 @@ function createLabel(labelName) {
 
 function combineLabels(messageData, removeLabel, addLabel) {
     var labelIds = messageData.labelIds; // Preserve labels
+    if (labelIds == undefined) labelIds = []
   
     // Step 4: Apply the original labels to the newly inserted message. except SENT
     var excludedLabels = ["SENT", getLabelIdByName(removeLabel), null]; // Labels to exclude
